@@ -1,7 +1,7 @@
 /*
 
 	Project : R.js
-	Authors: Chris Grant, Neil "Bane"  McCallion
+	Authors: Chris Grant, Neil "Bane" McCallion
 	Description: Make something light without bloat
 
 */
@@ -14,8 +14,9 @@
 
 	// If queyrSelectorAll is supported in this browser
 	Query = ('querySelectorAll' in D) ? function( _query ){
-		return D.querySelectorAll( _query )
+		return D.querySelectorAll( _query );
 	} : function( _query ){
+		// # TODO: get rid of the write, inject a script tag and set the src instead
 		W.Sizzle || D.write('<script src="https://raw.github.com/jquery/sizzle/master/sizzle.js"><\/script>');
 		return Sizzle( _query );
 	};
@@ -90,6 +91,16 @@
 		return new R(n);
 	}
 
+	// basic array iterator (didn't call it 'each' to discourage rampant abuse)
+	R.map = function(arr, f) {
+		if(!arr instanceof Array) throw('R.map(): arg 1 must be an array');
+		if(typeof f != 'function') throw('R.map(): arg 2 must be a function');
+
+		for(var i = 0, ln = arr.length; i<ln; i++) {
+			f.call(_, arr[i], i);
+		}
+	}
+
 	// Extension method, easy way to add in new methods/plugins
 	R.extend = function(source) {
 	  for (var k in source) {
@@ -97,11 +108,11 @@
 	      R.fn[k] = source[k];
 	    }
 	  }
-	  return this; 
+	  return this;
 	}
 
 	/** Add in global extenions **/
-	// .css(), .isNumeric() 
+	// .css(), .isNumeric()
 	R.extend({
 
 		// set css properties from an object of key-value pairs
