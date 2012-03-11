@@ -126,6 +126,11 @@
 		// is this Numeric?
 		isNumeric:function(n) {
 			return !isNaN(parseFloat(n)) && isFinite(n);
+		},
+
+		// get level 1 access to a DOM element
+		get:function( i ) {
+			return _.collection[i];
 		}
 
 	});
