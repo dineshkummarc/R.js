@@ -128,8 +128,11 @@
 	// .css(), .isNumeric()
 	R.extend({
 
-		// set css properties from an object of key-value pairs
+		// get/set css properties
+		// if obj is a CSS property string, returns that value (checks first element)
+		// if obj is an object, sets CSS properties from key-value pairs
 		css:function( obj ) {
+			if(typeof obj == 'string') return _getStyle(this, obj);
 			for(var key in obj){
 				_setStyle(this, key, obj[key]);
 			}
