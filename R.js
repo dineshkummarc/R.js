@@ -108,7 +108,7 @@
 	      R.fn[k] = source[k];
 	    }
 	  }
-	  return this;
+	  return _;
 	}
 
 	/** Add in global extenions **/
