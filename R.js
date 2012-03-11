@@ -65,8 +65,8 @@
 		(function(p) {
 			R.fn[p] = function(d) {
 				if(_.isNumeric(d)) d = d+'px';	// convert ints to px
-				_setStyle(p , d); // Helper
-				return _; //chainable
+				_setStyle(this,p , d); // Helper
+				return this; //chainable
 			}
 		})(ps[idx]);
 	}
@@ -130,9 +130,9 @@
 		// set css properties from an object of key-value pairs
 		css:function( obj ) {
 			for(var key in obj){
-				_setStyle(key, obj[key]);
+				_setStyle(this,key, obj[key]);
 			}
-			return _; // Chainable
+			return this; // Chainable
 		},
 
 		// is this Numeric?
@@ -173,11 +173,11 @@
 	**/
 
 	/** Helper help herlper **/
-	var _setStyle = function(property,value) {
-		console.log(_);
+	var _setStyle = function(t,property,value) {
+		console.log(_,t);
 		console.log('setStyle',property, value);
-		for(i=0;i<=_.len;i++){
-			_.collection[i].style[property] = value;
+		for(i=0;i<=t.len;i++){
+			t.collection[i].style[property] = value;
 		}
 	}
 
