@@ -185,8 +185,8 @@
 	var _getStyle = function(t, property){
 		var oElm = t.collection[0];
 		var strValue = "";
-		if(document.defaultView && document.defaultView.getComputedStyle){
-			strValue = document.defaultView.getComputedStyle(oElm, "").getPropertyValue(property);
+		if(D.defaultView && D.defaultView.getComputedStyle){
+			strValue = D.defaultView.getComputedStyle(oElm, "").getPropertyValue(property);
 		}
 		else if(oElm.currentStyle){
 			property = property.replace(/\-(\w)/g, function (strMatch, p1){
