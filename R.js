@@ -53,7 +53,7 @@
 			W.onload = cmd;
 		}
 
-		_ = this; // For helper help helpers
+		//_ = this; // For helper help helpers
 	}
 
 	// Bling connect our prototype, all the cool dawgs are doing it
@@ -64,7 +64,7 @@
 	while(idx--) {
 		(function(p) {
 			R.fn[p] = function(d) {
-				if(_.isNumeric(d)) d = d+'px';	// convert ints to px
+				if(this.isNumeric(d)) d = d+'px';	// convert ints to px
 				_setStyle(this,p , d); // Helper
 				return this; //chainable
 			}
@@ -94,7 +94,7 @@
 	// basic array iterator (didn't call it 'each' to discourage rampant abuse)
 	R.map = function(arr, f) {
 		for(var i = 0, ln = arr.length; i<ln; i++) {
-			f.call(_, arr[i], i);
+			f.call(this, arr[i], i);
 		}
 	}
 
@@ -120,7 +120,7 @@
 	      R.fn[k] = source[k];
 	    }
 	  }
-	  return _;
+	  return this;
 	}
 
 	/** Add in global extenions **/
@@ -140,9 +140,17 @@
 			return !isNaN(parseFloat(n)) && isFinite(n);
 		},
 
+		// instance-specific variant of R.map that uses the instance collection as an array
+	  	// # TODO: is this an OK way to approach this?
+		map: function(f) {
+		  	
+	      R.map(this.collection, f);
+		  	
+	    },
+
 		// get level 1 access to a DOM element
 		get:function( i ) {
-			return _.collection[i];
+			return this.collection[i];
 		},
 		/** Loose event listener wrapper, [ up for debate ]
 			Works on cached or queried items
@@ -160,7 +168,7 @@
 		**/
 
 		bind:function( type, cb ) {
-			R.map(_.collection, function(i){
+			this.map(function(i){
 				i.addEventListener( type, cb );
 			});
 		}
@@ -174,7 +182,7 @@
 
 	/** Helper help herlper **/
 	var _setStyle = function(t,property,value) {
-		console.log(_,t);
+		console.log(t);
 		console.log('setStyle',property, value);
 		for(i=0;i<=t.len;i++){
 			t.collection[i].style[property] = value;
