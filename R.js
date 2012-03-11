@@ -64,6 +64,7 @@
 	while(idx--) {
 		(function(p) {
 			R.fn[p] = function(d) {
+				if(typeof d == 'undefined') return parseInt(_getStyle(this, p));	// getter
 				if(this.isNumeric(d)) d = d+'px';	// convert ints to px
 				_setStyle(this,p , d); // Helper
 				return this; //chainable
@@ -130,7 +131,7 @@
 		// set css properties from an object of key-value pairs
 		css:function( obj ) {
 			for(var key in obj){
-				_setStyle(this,key, obj[key]);
+				_setStyle(this, key, obj[key]);
 			}
 			return this; // Chainable
 		},
@@ -143,10 +144,10 @@
 		// instance-specific variant of R.map that uses the instance collection as an array
 	  	// # TODO: is this an OK way to approach this?
 		map: function(f) {
-		  	
-	      R.map(this.collection, f);
-		  	
-	    },
+
+		      R.map(this.collection, f);
+
+		    },
 
 		// get level 1 access to a DOM element
 		get:function( i ) {
@@ -154,7 +155,7 @@
 		},
 		/** Loose event listener wrapper, [ up for debate ]
 			Works on cached or queried items
-		
+
 			R.cache({ div : 'div' });
 
 			div.bind('click', function(){ });
@@ -180,7 +181,22 @@
 	 * Private methods
 	**/
 
-	/** Helper help herlper **/
+	/** Wrapper for getting computed style property of an element **/
+	var _getStyle = function(t, property){
+		var oElm = t.collection[0];
+		var strValue = "";
+		if(document.defaultView && document.defaultView.getComputedStyle){
+			strValue = document.defaultView.getComputedStyle(oElm, "").getPropertyValue(property);
+		}
+		else if(oElm.currentStyle){
+			property = property.replace(/\-(\w)/g, function (strMatch, p1){
+				return p1.toUpperCase();
+			});
+			strValue = oElm.currentStyle[property];
+		}
+		return strValue;
+	};
+
 	var _setStyle = function(t,property,value) {
 		console.log(t);
 		console.log('setStyle',property, value);
