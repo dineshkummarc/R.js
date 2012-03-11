@@ -57,14 +57,6 @@
 	// Bling connect our prototype, all the cool dawgs are doing it
 	R.fn=R.prototype;
 
-	// set css properties from an object of key-value pairs
-	R.fn.css = function( obj ) {
-		for(var key in obj){
-			_setStyle(key, obj[key]);
-		}
-		return _; // Chainable
-	}
-
 	// css functions for width and height
 	var ps = ['width','height'], idx = 2;
 	while(idx--) {
@@ -98,10 +90,34 @@
 		return new R(n);
 	}
 
-	// Some handy helpers, may as well be public
-	R.fn.isNumeric = function(n) {
-		return !isNaN(parseFloat(n)) && isFinite(n);
+	// Extension method, easy way to add in new methods/plugins
+	R.extend = function(source) {
+	  for (var k in source) {
+	    if (source.hasOwnProperty(k)) {
+	      R.fn[k] = source[k];
+	    }
+	  }
+	  return this; 
 	}
+
+	/** Add in global extenions **/
+	// .css(), .isNumeric() 
+	R.extend({
+
+		// set css properties from an object of key-value pairs
+		css:function( obj ) {
+			for(var key in obj){
+				_setStyle(key, obj[key]);
+			}
+			return _; // Chainable
+		},
+
+		// is this Numeric?
+		isNumeric:function(n) {
+			return !isNaN(parseFloat(n)) && isFinite(n);
+		}
+
+	});
 
 
 	/**
