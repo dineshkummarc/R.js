@@ -10,24 +10,15 @@
 (function(W){
 
 	// Declare Query function and Document var
-	var Query, D = W.document,_;
+	var Query, D = W.document, _;
 
 	// If queyrSelectorAll is supported in this browser
-	if ('querySelectorAll' in D) {
-
-		// Query function uses querySelectorAll
-		Query = function( _query ){
-			return D.querySelectorAll( _query )
-		}
-
-	} else {
-
-		// If not, Query function injects Sizzle if no existence and uses it for Querying
-		Query = function( _query ){
-			W.Sizzle || D.write('<script src="https://raw.github.com/jquery/sizzle/master/sizzle.js"><\/script>');
-			return Sizzle( _query );
-		}
-	}
+	Query = ('querySelectorAll' in D) ? function( _query ){
+		return D.querySelectorAll( _query )
+	} : function( _query ){
+		W.Sizzle || D.write('<script src="https://raw.github.com/jquery/sizzle/master/sizzle.js"><\/script>');
+		return Sizzle( _query );
+	};
 
 	// R function with set command
 	R = function( cmd ) {
@@ -41,16 +32,16 @@
 			// Length of collection cached
 			this.len=this.collection.length-1;
 
-			//If this has no instance declared, sort it out 
+			//If this has no instance declared, sort it out
 			/***
 				Unsure about this approach, worth a look at
 			***/
 			if ( !(this instanceof R) ){
-				//return new R(cmd);
-				this.call(this,cmd);
+				return new R(cmd);
+				//this.call(this,cmd);
 			}
 
-		// If the cmd is a function, typically our init onload event, 
+		// If the cmd is a function, typically our init onload event,
 		} else {
 
 			// Should be DOMContentLoaded, but added this in for kicks and IE testing
@@ -60,40 +51,30 @@
 			W.onload = cmd;
 		}
 
-		_=this; // For helper help helpers
+		_ = this; // For helper help helpers
 	}
 
 	// Bling connect our prototype, all the cool dawgs are doing it
 	R.fn=R.prototype;
-	
-	/** Helper help herlper **/
-	_setStyle = function(property,value) {
-		console.log(_);
-		for(i=0;i<=_.len;i++){
-			_.collection[i].style[property] = value;
-		}
-	}
 
-	// css function, takes an object of style changes
+	// set css properties from an object of key-value pairs
 	R.fn.css = function( obj ) {
-		for(i=0;i<=(this.len);i++){
-			for(var key in obj){
-				this.collection[i].style[key] = obj[key];
-			}
+		for(var key in obj){
+			_setStyle(key, obj[key]);
 		}
 		return _; // Chainable
 	}
 
-	// height function, takes an int
-	R.fn.height = function(d) {
-		_setStyle('height',d+'px'); // Helper
-		return _; //chainable
-	}
-
-	// width function, takes an int
-	R.fn.width = function(d) {
-		_setStyle('width',d+'px'); // Helper
-		return _; // chainable
+	// css functions for width and height
+	var ps = ['width','height'], idx = 2;
+	while(idx--) {
+		(function(p) {
+			R.fn[p] = function(d) {
+				if(_.isNumeric(d)) d = d+'px';	// convert ints to px
+				_setStyle(p , d); // Helper
+				return _; //chainable
+			}
+		})(ps[idx]);
 	}
 
 	// cache function
@@ -115,6 +96,25 @@
 	// Long hand approach to query for a selector without going through constructor.
 	R.query = function( n ) {
 		return new R(n);
+	}
+
+	// Some handy helpers, may as well be public
+	R.fn.isNumeric = function(n) {
+		return !isNaN(parseFloat(n)) && isFinite(n);
+	}
+
+
+	/**
+	 * Private methods
+	**/
+
+	/** Helper help herlper **/
+	var _setStyle = function(property,value) {
+		console.log(_);
+		console.log('setStyle',property, value);
+		for(i=0;i<=_.len;i++){
+			_.collection[i].style[property] = value;
+		}
 	}
 
 
