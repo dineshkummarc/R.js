@@ -17,6 +17,7 @@
 		return D.querySelectorAll( _query );
 	} : function( _query ){
 		// # TODO: get rid of the write, inject a script tag and set the src instead
+		// Just checked this, it no longers works, need to implement a new method indeed
 		W.Sizzle || D.write('<script src="https://raw.github.com/jquery/sizzle/master/sizzle.js"><\/script>');
 		return Sizzle( _query );
 	};
@@ -91,7 +92,6 @@
 	}
 
 	// basic array iterator (didn't call it 'each' to discourage rampant abuse)
-	// callback 'f' should have args (item, <opt>index)
 	R.map = function(arr, f) {
 		for(var i = 0, ln = arr.length; i<ln; i++) {
 			f.call(_, arr[i], i);
@@ -135,12 +135,6 @@
 			return _; // Chainable
 		},
 
-		// instance-specific variant of R.map that uses the instance collection as an array
-		// # TODO: is this an OK way to approach this?
-		map: function(f) {
-			R.map(_.collection, f);
-		},
-
 		// is this Numeric?
 		isNumeric:function(n) {
 			return !isNaN(parseFloat(n)) && isFinite(n);
@@ -149,6 +143,26 @@
 		// get level 1 access to a DOM element
 		get:function( i ) {
 			return _.collection[i];
+		},
+		/** Loose event listener wrapper, [ up for debate ]
+			Works on cached or queried items
+		
+			R.cache({ div : 'div' });
+
+			div.bind('click', function(){ });
+
+			OR
+
+			R.query('div').bind('click', function(){ });
+
+			Short hand functions ofcourse for popular elements to be placed in, although futher up for debate
+
+		**/
+
+		bind:function( type, cb ) {
+			R.map(_.collection, function(i){
+				i.addEventListener( type, cb );
+			});
 		}
 
 	});
