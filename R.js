@@ -80,7 +80,6 @@
 		All divs are now cached under the var div
 	*/
 	R.cache = function(obj) {
-
 		for(var id in obj){
 			W[id] = new R(obj[id]);
 		}
@@ -94,12 +93,24 @@
 	// basic array iterator (didn't call it 'each' to discourage rampant abuse)
 	// callback 'f' should have args (item, <opt>index)
 	R.map = function(arr, f) {
-		if(!arr instanceof Array) throw('R.map(): arg 1 must be an array');
-		if(typeof f != 'function') throw('R.map(): arg 2 must be a function');
-
 		for(var i = 0, ln = arr.length; i<ln; i++) {
 			f.call(_, arr[i], i);
 		}
+	}
+
+	// super-basic XHR wrapper using jQuery-style arg object
+	R.xhr = function(args) {
+		if(!args.url) throw ('R.xhr: missing parameter \'url\'');
+
+		var defs = {
+			type: 'GET',
+			success: null
+		}
+		args = _mergeDefaults(args, defs);
+
+		var xobj = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+
+		// # TODO: rest of function goes here
 	}
 
 	// Extension method, easy way to add in new methods/plugins
@@ -154,6 +165,13 @@
 		for(i=0;i<=_.len;i++){
 			_.collection[i].style[property] = value;
 		}
+	}
+
+	var _mergeDefaults = function(args, defs) {
+		for(var k in defs) {
+			if(!args[k]) args[k] = defs[k];
+		}
+		return args;
 	}
 
 
