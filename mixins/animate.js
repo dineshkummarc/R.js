@@ -35,7 +35,7 @@ R.extend({
 
 			// Run our Tween
 			TWEEN.start();
-			new TWEEN.Tween( tmp ).to( to,duration ).onUpdate(function(){
+			var tween = new TWEEN.Tween( tmp ).to( to,duration ).onUpdate(function(){
 
 				// On update, loop through the properities to update them via duration
 				for(var prop in tmp){
