@@ -180,7 +180,7 @@
 
 		// Basic trigger 
 		trigger:function( eventName ) {
-			var tmpEvt = document.createEvent('Event');
+			var tmpEvt = D.createEvent('Event');
 			tmpEvt.initEvent(eventName, true, true);
 			this.map(function( elm ){
 				elm.dispatchEvent(tmpEvt);
