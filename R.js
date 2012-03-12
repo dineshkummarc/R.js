@@ -167,13 +167,23 @@
 
 			R.query('div').bind('click', function(){ });
 
-			Short hand functions ofcourse for popular elements to be placed in, although futher up for debate
+			Short hand functions ofcourse for popular elements to be placed in, although futher up for debate,
+			[ Can be preference mapped in through an array of events with personal mixin ]
 
 		**/
 
 		bind:function( type, cb ) {
 			this.map(function(i){
 				i.addEventListener( type, cb );
+			});
+		},
+
+		// Basic trigger 
+		trigger:function( eventName ) {
+			var tmpEvt = document.createEvent('Event');
+			tmpEvt.initEvent(eventName, true, true);
+			this.map(function( elm ){
+				elm.dispatchEvent(tmpEvt);
 			});
 		}
 
