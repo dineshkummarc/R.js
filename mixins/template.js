@@ -62,27 +62,3 @@ R.extend({
 	}
 });
 
-
-/**
-	Example usage:
-
-
-
-	var myData = [
-		{
-			title: 'My Item',
-			description: 'Some blurb'
-		},
-
-		...
-
-	];
-
-	R.cache({ ct: '#content' });
-	ct.template('myTemplate', myData);
-
-	- or -
-
-	R.query('#ct').template('myTemplate', myData);
-
-**/
