@@ -99,6 +99,17 @@
 		}
 	}
 
+	R.bind = function( ev, cb ) {
+		D.addEventListener( ev, cb );
+	}	
+
+	R.trigger = function( ev ) {
+		var tmpEvt = D.createEvent('Event');
+			tmpEvt.initEvent(ev, true, true);
+			console.log(D.body);
+			D.dispatchEvent(tmpEvt);
+	}
+
 	// super-basic XHR wrapper using jQuery-style arg object
 	R.xhr = function(args) {
 		if(!args.url) throw ('R.xhr: missing parameter \'url\'');
